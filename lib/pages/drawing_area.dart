@@ -42,9 +42,8 @@ class DrawingArea extends ConsumerWidget {
                         .addLine(Line(firstPoint, lastPoint));
                   }
                 } else {
-                  ref
-                      .read(linesProvider.notifier)
-                      .addLine(Line(lastPoint, lastPoint));
+                  ref.read(linesProvider.notifier).addLine(Line(points.first,
+                      lastPoint)); // Используем первую точку в качестве начальной для первой линии
                 }
                 ref.read(pointsProvider.notifier).clearPoints();
               }
