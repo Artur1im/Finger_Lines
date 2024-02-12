@@ -13,7 +13,26 @@ class DrawingArea extends ConsumerWidget {
     final lines = ref.watch(linesProvider);
 
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        Container(
+          margin: const EdgeInsets.only(left: 10, top: 10),
+          decoration: BoxDecoration(
+              color: Colors.white70, borderRadius: BorderRadius.circular(15)),
+          width: 100,
+          child: Row(
+            children: [
+              IconButton(
+                onPressed: () => ref.read(linesProvider.notifier).undo(),
+                icon: const Icon(Icons.undo),
+              ),
+              IconButton(
+                onPressed: () => ref.read(linesProvider.notifier).redo(),
+                icon: const Icon(Icons.redo),
+              ),
+            ],
+          ),
+        ),
         Expanded(
           child: GestureDetector(
             onPanUpdate: (details) {
@@ -42,31 +61,51 @@ class DrawingArea extends ConsumerWidget {
                         .addLine(Line(firstPoint, lastPoint));
                   }
                 } else {
-                  ref.read(linesProvider.notifier).addLine(Line(points.first,
-                      lastPoint)); // Используем первую точку в качестве начальной для первой линии
+                  ref
+                      .read(linesProvider.notifier)
+                      .addLine(Line(points.first, lastPoint));
                 }
                 ref.read(pointsProvider.notifier).clearPoints();
               }
             },
             child: CustomPaint(
-              painter: DrawingPainter(points: points, lines: lines),
+              painter: DrawingPainter(
+                  points: points, lines: lines, context: context),
               size: Size.infinite,
             ),
           ),
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            ElevatedButton(
-              onPressed: () => ref.read(linesProvider.notifier).undo(),
-              child: const Text('Назад'),
-            ),
-            ElevatedButton(
-              onPressed: () => ref.read(linesProvider.notifier).redo(),
-              child: const Text('Вперед'),
-            ),
-          ],
-        ),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Column(
+            children: [
+              const Card(
+                color: Colors.white,
+                child: Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text(
+                      'Нажмите на любую точку экрана, чтобы построить угол'),
+                ),
+              ),
+              SizedBox(
+                width: double.infinity,
+                child: InkWell(
+                  onTap: () => ref.read(linesProvider.notifier).undo(),
+                  child: const Card(
+                    color: Colors.white,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.close),
+                        Text('Отменить дейстиве'),
+                      ],
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+        )
       ],
     );
   }
