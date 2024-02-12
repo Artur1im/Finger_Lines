@@ -46,7 +46,7 @@ class DrawingPainter extends CustomPainter {
 
       final span = TextSpan(
         style: const TextStyle(color: Colors.black),
-        text: '${(lengthInCentimeters / 10).toStringAsFixed(1)} см',
+        text: (lengthInCentimeters / 10).toStringAsFixed(1),
       );
       final tp = TextPainter(
         text: span,
